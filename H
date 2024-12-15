@@ -1,0 +1,55 @@
+import java.util.Scanner;
+
+public class CompoundInterest {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Ввод начальных данных
+        System.out.println("Введите начальную сумму:");
+        double principal = scanner.nextDouble();
+
+        System.out.println("Введите процентную ставку (в десятичной форме):");
+        double interestRate = scanner.nextDouble();
+
+        System.out.println("Введите количество периодов:");
+        int numYears = scanner.nextInt();
+
+        // Вычисление сложного процента
+        double balance = calculateCompoundInterest(principal, interestRate, numYears);
+        System.out.println("Баланс через " + numYears + " лет: " + balance);
+
+        // Обратная задача: вычисление необходимой процентной ставки
+        System.out.println("Введите конечную сумму:");
+        double targetAmount = scanner.nextDouble();
+
+        System.out.println("Введите количество периодов:");
+        int periods = scanner.nextInt();
+
+        double interestRateRequired = calculateInterestRate(principal, targetAmount, periods);
+        System.out.println("Необходимая процентная ставка для достижения " + targetAmount + " за " + periods + " периодов: " + interestRateRequired);
+    }
+
+    private static double calculateCompoundInterest(double principal, double interestRate, int numYears) {
+        double balance = principal;
+        for (int i = 1; i <= numYears; i++) {
+            balance = principal * Math.pow(1 + interestRate, i);
+            System.out.println("Год " + i + ": " + balance);
+        }
+        return balance;
+    }
+
+    private static double calculateInterestRate(double principal, double targetAmount, int periods) {
+        double interestRate = 0;
+        for (double rate = 0.01; rate <= 1; rate += 0.01) {
+            double balance = principal;
+            for (int i = 1; i <= periods; i++) {
+                balance = balance * (1 + rate);
+                if (balance >= targetAmount) {
+                    interestRate = rate;
+                    break;
+                }
+            }
+        }
+        return interestRate;
+    }
+}
